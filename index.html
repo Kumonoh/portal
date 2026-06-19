@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading & Math Resource Hub – Kumon of Sylvania</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --blue:#1a5fad;--blue-light:#e8f1fb;--blue-mid:#b5d4f4;
+    --green:#3b6d11;--green-light:#eaf3de;--green-mid:#c0dd97;
+    --amber:#854f0b;--amber-light:#faeeda;--amber-mid:#fac775;
+    --teal:#0f6e56;--teal-light:#e1f5ee;--teal-mid:#9fe1cb;
+    --purple:#3c3489;--purple-light:#eeedfe;--purple-mid:#afa9ec;
+    --gray:#444441;--gray-light:#f1efe8;--gray-border:#d3d1c7;
+    --text:#1a1a18;--text-muted:#5f5e5a;--bg:#f8f7f4;
+    --radius:10px;--radius-lg:14px;--shadow:0 2px 12px rgba(0,0,0,.08)
+  }
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  /* LOCK SCREEN */
+  #lockScreen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#1a5fad 0%,#0f6e56 100%)
+  }
+  .lock-card{
+    background:white;border-radius:20px;padding:48px 40px;max-width:420px;width:90%;
+    text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)
+  }
+  .lock-logo{font-size:48px;margin-bottom:16px}
+  .lock-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+  .lock-sub{font-size:14px;color:var(--text-muted);margin-bottom:32px;line-height:1.6}
+  .code-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:24px}
+  .code-input{
+    width:52px;height:56px;border:2px solid var(--gray-border);border-radius:10px;
+    font-size:22px;font-weight:700;text-align:center;color:var(--blue);
+    background:var(--blue-light);outline:none;transition:.2s;text-transform:uppercase
+  }
+  .code-input:focus{border-color:var(--blue);background:white;box-shadow:0 0 0 3px rgba(26,95,173,.15)}
+  .lock-hint{font-size:12px;color:var(--text-muted);margin-bottom:20px}
+  .lock-hint a{color:var(--blue);text-decoration:none}
+  .lock-btn{
+    width:100%;padding:14px;background:var(--blue);color:white;border:none;
+    border-radius:var(--radius);font-size:16px;font-weight:600;cursor:pointer;
+    transition:.2s;margin-bottom:12px
+  }
+  .lock-btn:hover{background:#145099;transform:translateY(-1px)}
+  .lock-error{
+    background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 14px;
+    font-size:13px;font-weight:500;display:none;margin-top:12px
+  }
+  .lock-error.show{display:block}
+  .code-hint-box{
+    background:var(--blue-light);border-radius:8px;padding:12px;font-size:12px;
+    color:var(--blue);margin-top:16px;border:1px solid var(--blue-mid)
+  }
+
+  /* MAIN SITE */
+  #mainSite{display:none}
+  .site-header{
+    background:white;border-bottom:1px solid var(--gray-border);
+    padding:0 24px;position:sticky;top:0;z-index:100
+  }
+  .header-inner{
+    max-width:1100px;margin:0 auto;display:flex;align-items:center;
+    justify-content:space-between;height:64px
+  }
+  .header-logo{font-size:18px;font-weight:700;color:var(--blue)}
+  .header-logo span{color:var(--teal)}
+  .header-nav{display:flex;gap:4px}
+  .nav-btn{
+    padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;
+    border:none;background:none;color:var(--text-muted);cursor:pointer;transition:.15s
+  }
+  .nav-btn:hover,.nav-btn.active{background:var(--blue-light);color:var(--blue)}
+  .logout-btn{
+    font-size:12px;color:var(--text-muted);background:none;border:1px solid var(--gray-border);
+    border-radius:8px;padding:6px 12px;cursor:pointer;transition:.15s
+  }
+  .logout-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+  .page-content{max-width:1100px;margin:0 auto;padding:32px 24px}
+
+  /* HERO */
+  .hero{
+    background:var(--blue);color:white;border-radius:var(--radius-lg);
+    padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden
+  }
+  .hero::after{
+    content:'';position:absolute;right:-60px;top:-40px;
+    width:240px;height:240px;border-radius:50%;
+    background:rgba(255,255,255,.06)
+  }
+  .hero h1{font-size:24px;font-weight:700;margin-bottom:8px}
+  .hero p{font-size:14px;opacity:.85;line-height:1.6;max-width:500px}
+  .hero-badge{
+    display:inline-block;background:rgba(255,255,255,.2);
+    border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;margin-bottom:14px
+  }
+
+  /* TABS */
+  .tab-bar{
+    display:flex;gap:8px;margin-bottom:24px;background:white;
+    padding:6px;border-radius:var(--radius);border:1px solid var(--gray-border);
+    width:fit-content
+  }
+  .tab{
+    padding:9px 20px;border-radius:8px;font-size:14px;font-weight:500;
+    border:none;background:none;cursor:pointer;color:var(--text-muted);transition:.15s
+  }
+  .tab.active{background:var(--blue);color:white}
+
+  /* SECTION HEADERS */
+  .section-header{
+    display:flex;align-items:center;gap:10px;margin:28px 0 16px
+  }
+  .section-icon{
+    width:36px;height:36px;border-radius:9px;display:flex;align-items:center;
+    justify-content:center;font-size:18px;flex-shrink:0
+  }
+  .section-icon.blue{background:var(--blue-light)}
+  .section-icon.green{background:var(--green-light)}
+  .section-icon.amber{background:var(--amber-light)}
+  .section-header h2{font-size:18px;font-weight:600;color:var(--text)}
+  .section-header p{font-size:13px;color:var(--text-muted);margin-top:2px}
+
+  /* SKILL GRID */
+  .skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+  .skill-card{
+    background:white;border:1px solid var(--gray-border);border-radius:var(--radius);
+    padding:16px;text-align:center;transition:.15s;cursor:default
+  }
+  .skill-card:hover{border-color:var(--blue-mid);box-shadow:var(--shadow);transform:translateY(-1px)}
+  .skill-sound{font-size:28px;font-weight:700;color:var(--blue);margin-bottom:6px}
+  .skill-word{font-size:12px;color:var(--text-muted)}
+  .skill-example{font-size:11px;color:var(--text-muted);margin-top:3px;font-style:italic}
+
+  /* COLORFUL LETTER CARDS */
+  .lcard{
+    border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;
+    transition:transform .15s,box-shadow .15s;border:none;
+    display:flex;flex-direction:column;align-items:center;gap:4px
+  }
+  .lcard:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 6px 18px rgba(0,0,0,.15)}
+  .lcard:active{transform:scale(.96)}
+  .lcard-vowel{background:linear-gradient(135deg,#ffe0e0,#ffb3b3);border:2px solid #f08080}
+  .lcard-c1{background:linear-gradient(135deg,#ddeeff,#b3d4ff);border:2px solid #7ab0f0}
+  .lcard-c2{background:linear-gradient(135deg,#e0f7e9,#b3eac7);border:2px solid #6dc98a}
+  .lcard-c3{background:linear-gradient(135deg,#fff8dc,#ffe99a);border:2px solid #f0cc50}
+  .lcard-c4{background:linear-gradient(135deg,#f0e6ff,#d9b3ff);border:2px solid #b07ae0}
+  .lcard-c5{background:linear-gradient(135deg,#ffe6f0,#ffb3d0);border:2px solid #f07aaa}
+  .lcard-c6{background:linear-gradient(135deg,#e6f9ff,#b3ecff);border:2px solid #60c8f0}
+  .lcard-letter{font-size:22px;font-weight:800;line-height:1}
+  .lcard-vowel .lcard-letter{color:#c0392b}
+  .lcard-c1 .lcard-letter,.lcard-c2 .lcard-letter,.lcard-c3 .lcard-letter,
+  .lcard-c4 .lcard-letter,.lcard-c5 .lcard-letter,.lcard-c6 .lcard-letter{color:#1a3a6e}
+  .lcard-emoji{font-size:32px;line-height:1;margin:2px 0}
+  .lcard-word{font-size:11px;font-weight:600;color:#444;letter-spacing:.02em}
+  .lcard.playing{animation:cardPop .3s ease}
+  @keyframes cardPop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .vowel-section{margin-bottom:28px}
+  .vowel-label{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .vowel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .vowel-header{
+    background:var(--blue);color:white;border-radius:8px 8px 0 0;
+    padding:10px 6px;text-align:center;font-size:20px;font-weight:700
+  }
+  .vowel-words{
+    background:white;border:1px solid var(--gray-border);border-top:none;
+    border-radius:0 0 8px 8px;padding:8px;text-align:center
+  }
+  .vowel-word{font-size:14px;color:var(--text);padding:3px 0;border-bottom:1px solid var(--gray-light)}
+  .vowel-word:last-child{border-bottom:none}
+
+  /* BLEND TABLE */
+  .blend-table{width:100%;border-collapse:collapse;margin-bottom:24px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray-border)}
+  .blend-table th{background:var(--blue);color:white;padding:10px 14px;font-size:14px;font-weight:600;text-align:center}
+  .blend-table td{padding:9px 14px;font-size:14px;text-align:center;border:1px solid var(--gray-light);background:white;color:var(--text)}
+  .blend-table tr:hover td{background:var(--blue-light)}
+  .blend-th-label{background:#145099 !important;font-size:12px;font-weight:500;opacity:.9}
+
+  /* SIGHT WORD GRID */
+  .sw-cell{
+    border-radius:10px;padding:14px 6px;text-align:center;font-size:17px;
+    font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;
+    border:2px solid transparent;user-select:none
+  }
+  .sw-cell:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 5px 14px rgba(0,0,0,.13)}
+  .sw-cell:active{transform:scale(.95)}
+  .sw-cell.done{opacity:.45;text-decoration:line-through}
+  /* 10 rotating pastel colors */
+  .sw-c0{background:#ddeeff;color:#1a3a6e;border-color:#7ab0f0}
+  .sw-c1{background:#e0f7e9;color:#1a4a28;border-color:#6dc98a}
+  .sw-c2{background:#fff8dc;color:#5a4000;border-color:#f0cc50}
+  .sw-c3{background:#f0e6ff;color:#3a1a6e;border-color:#b07ae0}
+  .sw-c4{background:#ffe6f0;color:#6e1a3a;border-color:#f07aaa}
+  .sw-c5{background:#e6f9ff;color:#1a4a5a;border-color:#60c8f0}
+  .sw-c6{background:#fff0e6;color:#6e3a1a;border-color:#f0a060}
+  .sw-c7{background:#e6ffe6;color:#1a4a1a;border-color:#60c860}
+  .sw-c8{background:#ffe0e0;color:#6e1a1a;border-color:#f08080}
+  .sw-c9{background:#f5f0ff;color:#3a1a5a;border-color:#a090f0}
+  .sw-cell.playing{animation:swPop .25s ease}
+  @keyframes swPop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+
+  /* TIP CARDS */
+  .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px}
+  .tip-card{
+    background:white;border:1px solid var(--gray-border);border-radius:var(--radius-lg);
+    padding:20px;transition:.15s
+  }
+  .tip-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+  .tip-icon{font-size:24px;margin-bottom:10px}
+  .tip-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+  .tip-body{font-size:13px;color:var(--text-muted);line-height:1.6}
+  .tip-accent-blue{border-left:3px solid var(--blue)}
+  .tip-accent-green{border-left:3px solid var(--green)}
+  .tip-accent-amber{border-left:3px solid var(--amber)}
+  .tip-accent-teal{border-left:3px solid var(--teal)}
+  .tip-accent-purple{border-left:3px solid var(--purple)}
+
+  /* RESOURCE LINKS */
+  .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:24px}
+  .resource-link{
+    background:white;border:1px solid var(--gray-border);border-radius:var(--radius);
+    padding:14px 16px;text-decoration:none;color:var(--text);
+    display:flex;align-items:center;gap:12px;transition:.15s
+  }
+  .resource-link:hover{border-color:var(--blue-mid);box-shadow:var(--shadow);color:var(--blue)}
+  .resource-link-icon{font-size:20px;flex-shrink:0}
+  .resource-link-title{font-size:13px;font-weight:600;margin-bottom:2px}
+  .resource-link-sub{font-size:11px;color:var(--text-muted)}
+  .resource-link-arrow{margin-left:auto;font-size:16px;color:var(--text-muted)}
+
+  /* BADGES */
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+  .badge-blue{background:var(--blue-light);color:var(--blue)}
+  .badge-green{background:var(--green-light);color:var(--green)}
+  .badge-amber{background:var(--amber-light);color:var(--amber)}
+
+  /* ACCORDION */
+  .accordion{border:1px solid var(--gray-border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+  .accordion-header{
+    width:100%;background:white;border:none;padding:14px 18px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:14px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:.15s
+  }
+  .accordion-header:hover{background:var(--gray-light)}
+  .accordion-arrow{transition:.2s;font-size:12px;color:var(--text-muted)}
+  .accordion-body{padding:0 18px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+  .accordion.open .accordion-body{max-height:2000px;padding:12px 18px 18px}
+  .accordion.open .accordion-arrow{transform:rotate(180deg)}
+
+  /* RESOURCE ZONE BANDS */
+  .resource-zone{border-radius:var(--radius-lg);padding:20px 20px 8px;margin-bottom:28px}
+  .resource-zone-reading{background:#fff0e6;border:1.5px solid #fac775}
+  .resource-zone-math{background:#e8f4fb;border:1.5px solid #b5d4f4}
+  .resource-zone-label{
+    display:flex;align-items:center;gap:10px;margin-bottom:16px;
+    padding-bottom:12px;border-bottom:1.5px solid rgba(0,0,0,.08)
+  }
+  .resource-zone-label h2{font-size:17px;font-weight:600}
+  .resource-zone-reading .resource-zone-label h2{color:#854f0b}
+  .resource-zone-math .resource-zone-label h2{color:#145099}
+  .resource-zone-reading .accordion{border-color:#fac775;background:white}
+  .resource-zone-math .accordion{border-color:#b5d4f4;background:white}
+  .resource-zone-reading .accordion-header:hover{background:#fff0e6}
+  .resource-zone-math .accordion-header:hover{background:#e8f4fb}
+  .sounds-inline-link{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fff0e6;border:1px solid #fac775;border-radius:20px;
+    padding:4px 12px;font-size:12px;font-weight:600;color:#854f0b;
+    text-decoration:none;cursor:pointer;transition:.15s;margin-left:8px
+  }
+  .sounds-inline-link:hover{background:#fac775;color:#5a3208}
+  .sounds-inline-link-math{background:#e8f4fb;border-color:#b5d4f4;color:#145099}
+  .sounds-inline-link-math:hover{background:#b5d4f4;color:#0d3a6e}
+
+  /* DIVIDER */
+  .divider{height:1px;background:var(--gray-border);margin:28px 0}
+
+  /* FOOTER */
+  .site-footer{
+    text-align:center;padding:24px;font-size:12px;color:var(--text-muted);
+    border-top:1px solid var(--gray-border);background:white;margin-top:40px
+  }
+
+  /* PAGE SECTIONS */
+  .page-section{display:none}
+  .page-section.active{display:block}
+
+  /* PRINTABLE CARDS */
+  .printable-card{
+    background:white;border:2px solid var(--blue);border-radius:var(--radius-lg);
+    padding:20px;margin-bottom:14px
+  }
+  .printable-title{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:10px}
+
+  @media(max-width:600px){
+    .skill-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+    .vowel-grid{grid-template-columns:repeat(3,1fr)}
+    .page-content{padding:20px 16px}
+    .hero{padding:24px 20px}
+    .tab-bar{width:100%;overflow-x:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="lock-logo">🔐</div>
+    <div class="lock-title">Parent Resource Hub</div>
+    <div class="lock-sub">Kumon of Sylvania — Private resources to help your child practice at home. Enter your access code to continue.</div>
+    <div class="code-inputs">
+      <input class="code-input" id="c1" maxlength="1" oninput="advance(this,'c2')" onkeydown="back(event,'','c1')">
+      <input class="code-input" id="c2" maxlength="1" oninput="advance(this,'c3')" onkeydown="back(event,'c1','c3')">
+      <input class="code-input" id="c3" maxlength="1" oninput="advance(this,'c4')" onkeydown="back(event,'c2','c4')">
+      <input class="code-input" id="c4" maxlength="1" oninput="tryUnlock()" onkeydown="back(event,'c3','c4')">
+    </div>
+    <div class="lock-hint">Ask your instructor for your 4-character access code.</div>
+    <div class="lock-error" id="lockError">❌ Incorrect code. Please check with your instructor.</div>
+    <div class="code-hint-box">💡 <strong>Tip:</strong> Codes are not case-sensitive. Example format: <strong>KS25</strong></div>
+  </div>
+</div>
+
+<!-- MAIN SITE -->
+<div id="mainSite">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-logo">Kumon <span>Sylvania</span> · Parent Hub</div>
+      <nav class="header-nav">
+        <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
+        <button class="nav-btn" onclick="showPage('resources',this)">Resources</button>
+        <button class="nav-btn" onclick="showPage('sounds',this)">Sounds</button>
+        <button class="nav-btn" onclick="showPage('sightwords',this)">Sight Words</button>
+        <button class="nav-btn" onclick="showPage('tips',this)">Practice Tips</button>
+      </nav>
+      <button class="logout-btn" onclick="logout()">Lock 🔒</button>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-section active">
+      <div class="hero">
+        <div class="hero-badge">🏫 Private Access</div>
+        <h1>Welcome, Kumon Family!</h1>
+        <p>This hub gives you everything you need to support your child's reading and math practice at home. Explore sounds, sight words, printable charts, and expert tips — all in one place.</p>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card tip-accent-blue" style="cursor:pointer" onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2])">
+          <div class="tip-icon">🔤</div>
+          <div class="tip-title">Letter Sounds & Blends</div>
+          <div class="tip-body">Interactive reference for all consonant combinations, vowel patterns, and R-controlled sounds from Levels 5A–3A.</div>
+        </div>
+        <div class="tip-card tip-accent-green" style="cursor:pointer" onclick="showPage('sightwords',document.querySelectorAll('.nav-btn')[3])">
+          <div class="tip-icon">📚</div>
+          <div class="tip-title">100 Sight Words</div>
+          <div class="tip-body">The most important words for your child to recognize instantly. Practice both the A-side and B-side lists.</div>
+        </div>
+        <div class="tip-card tip-accent-amber" style="cursor:pointer" onclick="showPage('resources',document.querySelectorAll('.nav-btn')[1])">
+          <div class="tip-icon">📥</div>
+          <div class="tip-title">Downloadable Charts</div>
+          <div class="tip-body">Printable reference sheets for Alphabet Sounds, Consonant Combinations, Vowel Sounds, and more.</div>
+        </div>
+        <div class="tip-card tip-accent-teal" style="cursor:pointer" onclick="showPage('tips',document.querySelectorAll('.nav-btn')[4])">
+          <div class="tip-icon">💡</div>
+          <div class="tip-title">At-Home Practice Tips</div>
+          <div class="tip-body">Evidence-based strategies to make daily practice feel natural, fun, and effective for your child.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-header">
+        <div class="section-icon blue">📋</div>
+        <div><h2>How to use this hub</h2><p>A quick guide for parents</p></div>
+      </div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-title">Step 1 — Know your child's level</div>
+          <div class="tip-body">Your instructor will tell you which level your child is working on (e.g., Reading 4A, Math 5A). Use the Sounds tab to find their current patterns.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Step 2 — Practice the sounds</div>
+          <div class="tip-body">Tap each sound on the Sounds page to see example words. Spend 5–10 minutes a day having your child say each sound and word aloud.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Step 3 — Review sight words daily</div>
+          <div class="tip-body">Flip through the Sight Words list like flashcards. Aim for instant recognition — no sounding out. Even 5 words per day adds up fast.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Step 4 — Download & print charts</div>
+          <div class="tip-body">Post the alphabet chart or consonant chart somewhere visible at home — the refrigerator, their desk, or a bedroom wall works great.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOUNDS PAGE -->
+    <div id="page-sounds" class="page-section">
+      <div class="section-header">
+        <div class="section-icon blue">🔤</div>
+        <div><h2>Sounds Reference Guide</h2><p>Choose a level to explore sounds your child is practicing</p></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:#fff0e6;border:1px solid #fac775;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#854f0b;font-weight:500">
+        <span style="font-size:20px">🔊</span>
+        <span>Tap any word to hear it read aloud. Works on phone and desktop.</span>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab active" onclick="showSoundsTab('5a',this)">Level 5A</button>
+        <button class="tab" onclick="showSoundsTab('4a',this)">Level 4A</button>
+        <button class="tab" onclick="showSoundsTab('3a',this)">Level 3A</button>
+        <button class="tab" onclick="showSoundsTab('vowels',this)">Vowel Patterns</button>
+      </div>
+
+      <!-- 5A TAB -->
+      <div id="sounds-5a" class="sounds-tab">
+        <div class="section-header" style="margin-top:0">
+          <div><h2>Reading 5A — Letter Sounds</h2><p>Individual consonants and short vowel words</p></div>
+        </div>
+
+        <div class="vowel-label">Letter Sounds (A–Z)</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">
+          <span style="color:#c0392b;font-weight:700">Red</span> = vowels &nbsp;·&nbsp; <span style="color:#1a5fad;font-weight:700">Blue</span> = consonants &nbsp;·&nbsp; 🔊 Tap a card to hear the word!
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:24px" id="letterGrid">
+          <div class="lcard lcard-vowel" data-word="apple"><div class="lcard-letter">Aa</div><div class="lcard-emoji">🍎</div><div class="lcard-word">apple</div></div>
+          <div class="lcard lcard-c1"    data-word="ball"><div class="lcard-letter">Bb</div><div class="lcard-emoji">⚽</div><div class="lcard-word">ball</div></div>
+          <div class="lcard lcard-c2"    data-word="cup"><div class="lcard-letter">Cc</div><div class="lcard-emoji">☕</div><div class="lcard-word">cup</div></div>
+          <div class="lcard lcard-c3"    data-word="doll"><div class="lcard-letter">Dd</div><div class="lcard-emoji">🪆</div><div class="lcard-word">doll</div></div>
+          <div class="lcard lcard-vowel" data-word="egg"><div class="lcard-letter">Ee</div><div class="lcard-emoji">🥚</div><div class="lcard-word">egg</div></div>
+          <div class="lcard lcard-c4"    data-word="fish"><div class="lcard-letter">Ff</div><div class="lcard-emoji">🐟</div><div class="lcard-word">fish</div></div>
+          <div class="lcard lcard-c5"    data-word="goat"><div class="lcard-letter">Gg</div><div class="lcard-emoji">🐐</div><div class="lcard-word">goat</div></div>
+          <div class="lcard lcard-c6"    data-word="horse"><div class="lcard-letter">Hh</div><div class="lcard-emoji">🐴</div><div class="lcard-word">horse</div></div>
+          <div class="lcard lcard-vowel" data-word="igloo"><div class="lcard-letter">Ii</div><div class="lcard-emoji">🏔️</div><div class="lcard-word">igloo</div></div>
+          <div class="lcard lcard-c1"    data-word="jar"><div class="lcard-letter">Jj</div><div class="lcard-emoji">🫙</div><div class="lcard-word">jar</div></div>
+          <div class="lcard lcard-c2"    data-word="key"><div class="lcard-letter">Kk</div><div class="lcard-emoji">🔑</div><div class="lcard-word">key</div></div>
+          <div class="lcard lcard-c3"    data-word="lemon"><div class="lcard-letter">Ll</div><div class="lcard-emoji">🍋</div><div class="lcard-word">lemon</div></div>
+          <div class="lcard lcard-c4"    data-word="moon"><div class="lcard-letter">Mm</div><div class="lcard-emoji">🌙</div><div class="lcard-word">moon</div></div>
+          <div class="lcard lcard-c5"    data-word="net"><div class="lcard-letter">Nn</div><div class="lcard-emoji">🥅</div><div class="lcard-word">net</div></div>
+          <div class="lcard lcard-vowel" data-word="octopus"><div class="lcard-letter">Oo</div><div class="lcard-emoji">🐙</div><div class="lcard-word">octopus</div></div>
+          <div class="lcard lcard-c6"    data-word="pencil"><div class="lcard-letter">Pp</div><div class="lcard-emoji">✏️</div><div class="lcard-word">pencil</div></div>
+          <div class="lcard lcard-c1"    data-word="queen"><div class="lcard-letter">Qq</div><div class="lcard-emoji">👑</div><div class="lcard-word">queen</div></div>
+          <div class="lcard lcard-c2"    data-word="ring"><div class="lcard-letter">Rr</div><div class="lcard-emoji">💍</div><div class="lcard-word">ring</div></div>
+          <div class="lcard lcard-c3"    data-word="sun"><div class="lcard-letter">Ss</div><div class="lcard-emoji">☀️</div><div class="lcard-word">sun</div></div>
+          <div class="lcard lcard-c4"    data-word="turtle"><div class="lcard-letter">Tt</div><div class="lcard-emoji">🐢</div><div class="lcard-word">turtle</div></div>
+          <div class="lcard lcard-vowel" data-word="umbrella"><div class="lcard-letter">Uu</div><div class="lcard-emoji">☂️</div><div class="lcard-word">umbrella</div></div>
+          <div class="lcard lcard-c5"    data-word="van"><div class="lcard-letter">Vv</div><div class="lcard-emoji">🚐</div><div class="lcard-word">van</div></div>
+          <div class="lcard lcard-c6"    data-word="wall"><div class="lcard-letter">Ww</div><div class="lcard-emoji">🧱</div><div class="lcard-word">wall</div></div>
+          <div class="lcard lcard-c1"    data-word="box"><div class="lcard-letter">Xx</div><div class="lcard-emoji">📦</div><div class="lcard-word">box</div></div>
+          <div class="lcard lcard-c2"    data-word="yarn"><div class="lcard-letter">Yy</div><div class="lcard-emoji">🧶</div><div class="lcard-word">yarn</div></div>
+          <div class="lcard lcard-c3"    data-word="zebra"><div class="lcard-letter">Zz</div><div class="lcard-emoji">🦓</div><div class="lcard-word">zebra</div></div>
+        </div>
+
+        <div class="vowel-label" style="margin-top:20px">3-Letter Word Practice</div>
+        <div class="vowel-grid">
+          <div><div class="vowel-header">a</div><div class="vowel-words"><div class="vowel-word">bat</div><div class="vowel-word">cap</div><div class="vowel-word">sad</div><div class="vowel-word">fan</div><div class="vowel-word">mad</div></div></div>
+          <div><div class="vowel-header">e</div><div class="vowel-words"><div class="vowel-word">red</div><div class="vowel-word">ten</div><div class="vowel-word">bed</div><div class="vowel-word">leg</div><div class="vowel-word">hen</div></div></div>
+          <div><div class="vowel-header">i</div><div class="vowel-words"><div class="vowel-word">hip</div><div class="vowel-word">sit</div><div class="vowel-word">win</div><div class="vowel-word">pig</div><div class="vowel-word">kid</div></div></div>
+          <div><div class="vowel-header">o</div><div class="vowel-words"><div class="vowel-word">dog</div><div class="vowel-word">box</div><div class="vowel-word">pot</div><div class="vowel-word">log</div><div class="vowel-word">fox</div></div></div>
+          <div><div class="vowel-header">u</div><div class="vowel-words"><div class="vowel-word">bug</div><div class="vowel-word">mud</div><div class="vowel-word">cup</div><div class="vowel-word">tub</div><div class="vowel-word">gum</div></div></div>
+        </div>
+      </div>
+
+      <!-- 4A TAB -->
+      <div id="sounds-4a" class="sounds-tab" style="display:none">
+        <div class="section-header" style="margin-top:0">
+          <div><h2>Reading 4A — Consonant Combinations & Vowel Patterns</h2><p>Blends, digraphs, and silent-e words</p></div>
+        </div>
+
+        <div class="vowel-label">L-Blends</div>
+        <table class="blend-table">
+          <thead><tr><th>bl_</th><th>cl_</th><th>fl_</th><th>gl_</th><th>pl_</th><th>sl_</th></tr></thead>
+          <tbody>
+            <tr><td>blast</td><td>clap</td><td>flag</td><td>glad</td><td>plug</td><td>slip</td></tr>
+            <tr><td>black</td><td>class</td><td>flat</td><td>glass</td><td>plum</td><td>slug</td></tr>
+            <tr><td>block</td><td>clock</td><td>fly</td><td>glob</td><td>plant</td><td>sled</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label">R-Blends</div>
+        <table class="blend-table">
+          <thead><tr><th>br_</th><th>dr_</th><th>fr_</th><th>gr_</th><th>pr_</th><th>tr_</th></tr></thead>
+          <tbody>
+            <tr><td>brush</td><td>drum</td><td>frog</td><td>grab</td><td>prod</td><td>trip</td></tr>
+            <tr><td>brick</td><td>dress</td><td>fry</td><td>grass</td><td>print</td><td>trap</td></tr>
+            <tr><td>bring</td><td>drop</td><td>fruit</td><td>green</td><td>prize</td><td>track</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label">S-Blends</div>
+        <table class="blend-table">
+          <thead><tr><th>sm_</th><th>sp_</th><th>sk_</th><th>sn_</th><th>st_</th><th>sw_</th></tr></thead>
+          <tbody>
+            <tr><td>smash</td><td>spin</td><td>skin</td><td>snug</td><td>stop</td><td>swim</td></tr>
+            <tr><td>smell</td><td>spell</td><td>skip</td><td>snack</td><td>step</td><td>swift</td></tr>
+            <tr><td>small</td><td>spill</td><td>skate</td><td>snap</td><td>stand</td><td>sweep</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label">Digraphs & Special Combinations</div>
+        <table class="blend-table">
+          <thead><tr><th>ch_</th><th>sh_</th><th>wh_</th><th>th_</th><th>_ng</th><th>str_</th></tr></thead>
+          <tbody>
+            <tr><td>chin</td><td>shop</td><td>white</td><td>thin</td><td>bring</td><td>street</td></tr>
+            <tr><td>chop</td><td>shell</td><td>wheel</td><td>thick</td><td>long</td><td>stripe</td></tr>
+            <tr><td>chick</td><td>ship</td><td>which</td><td>thank</td><td>king</td><td>strike</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label">Endings</div>
+        <table class="blend-table">
+          <thead><tr><th>_ck</th><th>_nk</th><th>_nt</th><th>_nd</th><th>_mp</th><th>_st</th></tr></thead>
+          <tbody>
+            <tr><td>duck</td><td>pink</td><td>ant</td><td>hand</td><td>lamp</td><td>lost</td></tr>
+            <tr><td>back</td><td>skunk</td><td>sent</td><td>pond</td><td>jump</td><td>nest</td></tr>
+            <tr><td>block</td><td>stink</td><td>plant</td><td>send</td><td>bump</td><td>fast</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label">Silent-E Rule (a_e, i_e, o_e, u_e)</div>
+        <div class="vowel-grid">
+          <div><div class="vowel-header">a_e</div><div class="vowel-words"><div class="vowel-word">cage</div><div class="vowel-word">grape</div><div class="vowel-word">make</div></div></div>
+          <div><div class="vowel-header">i_e</div><div class="vowel-words"><div class="vowel-word">bike</div><div class="vowel-word">kite</div><div class="vowel-word">ride</div></div></div>
+          <div><div class="vowel-header">o_e</div><div class="vowel-words"><div class="vowel-word">nose</div><div class="vowel-word">bone</div><div class="vowel-word">home</div></div></div>
+          <div><div class="vowel-header">u_e</div><div class="vowel-words"><div class="vowel-word">tube</div><div class="vowel-word">mule</div><div class="vowel-word">cute</div></div></div>
+          <div><div class="vowel-header" style="font-size:14px">Rule</div><div class="vowel-words"><div class="vowel-word" style="font-size:12px">Silent e makes the vowel say its name!</div></div></div>
+        </div>
+
+        <div class="vowel-label" style="margin-top:20px">R-Controlled Vowels</div>
+        <table class="blend-table">
+          <thead><tr><th>ar</th><th>or</th><th>ir</th><th>ur</th><th>er</th></tr></thead>
+          <tbody>
+            <tr><td>car</td><td>fort</td><td>girl</td><td>fur</td><td>fern</td></tr>
+            <tr><td>star</td><td>storm</td><td>bird</td><td>hurt</td><td>herd</td></tr>
+            <tr><td>far</td><td>stork</td><td>first</td><td>turn</td><td>nerd</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:20px">Vowel Combinations</div>
+        <table class="blend-table">
+          <thead><tr><th>_ay</th><th>_ew</th><th>_ow</th><th>_oy</th><th>_aw</th></tr></thead>
+          <tbody>
+            <tr><td>play</td><td>new</td><td>mow</td><td>toy</td><td>draw</td></tr>
+            <tr><td>gray</td><td>chew</td><td>grow</td><td>joy</td><td>claw</td></tr>
+            <tr><td>pay</td><td>stew</td><td>snow</td><td>boy</td><td>lawn</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3A TAB -->
+      <div id="sounds-3a" class="sounds-tab" style="display:none">
+        <div class="section-header" style="margin-top:0">
+          <div><h2>Reading 3A — Challenging Sounds</h2><p>Double consonants, vowel combos, and complex patterns</p></div>
+        </div>
+
+        <div class="vowel-label">Vowel Combinations</div>
+        <table class="blend-table">
+          <thead><tr><th>ee</th><th>oo (long)</th><th>oo (short)</th><th>ai</th><th>ea</th><th>oa</th></tr></thead>
+          <tbody>
+            <tr><td>see</td><td>room</td><td>hook</td><td>aim</td><td>eat</td><td>oak</td></tr>
+            <tr><td>cheek</td><td>cool</td><td>good</td><td>pail</td><td>leaf</td><td>coach</td></tr>
+            <tr><td>seed</td><td>noon</td><td>book</td><td>braid</td><td>teach</td><td>boat</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:16px">More Vowel Patterns</div>
+        <table class="blend-table">
+          <thead><tr><th>ou</th><th>oi</th><th>ui</th><th>ea (short)</th><th>air</th></tr></thead>
+          <tbody>
+            <tr><td>ouch</td><td>oil</td><td>fruit</td><td>bread</td><td>air</td></tr>
+            <tr><td>mouth</td><td>coin</td><td>suit</td><td>sweat</td><td>pair</td></tr>
+            <tr><td>couch</td><td>point</td><td>juice</td><td>breath</td><td>fair</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:16px">Double Consonants</div>
+        <table class="blend-table">
+          <thead><tr><th>nn</th><th>tt</th><th>ll</th><th>bb</th><th>mm</th><th>ss</th></tr></thead>
+          <tbody>
+            <tr><td>bunny</td><td>butter</td><td>jelly</td><td>rabbit</td><td>mommy</td><td>messy</td></tr>
+            <tr><td>funny</td><td>letter</td><td>silly</td><td>ribbon</td><td>tummy</td><td>glasses</td></tr>
+            <tr><td>penny</td><td>bottle</td><td>dollar</td><td>bubble</td><td>hammer</td><td>lesson</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:16px">Challenging Endings</div>
+        <table class="blend-table">
+          <thead><tr><th>_y (says "e")</th><th>_ly</th><th>_er</th><th>_le</th><th>_ing</th><th>_tch</th></tr></thead>
+          <tbody>
+            <tr><td>baby</td><td>daily</td><td>cooler</td><td>bottle</td><td>ring</td><td>match</td></tr>
+            <tr><td>silly</td><td>madly</td><td>batter</td><td>handle</td><td>thing</td><td>witch</td></tr>
+            <tr><td>jelly</td><td>partly</td><td>summer</td><td>bubble</td><td>sing</td><td>catch</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:16px">Special Letter Combinations</div>
+        <table class="blend-table">
+          <thead><tr><th>wr_</th><th>ph_</th><th>_mb</th><th>ci_</th><th>_ge</th></tr></thead>
+          <tbody>
+            <tr><td>wrist</td><td>phone</td><td>numb</td><td>city</td><td>cage</td></tr>
+            <tr><td>wrap</td><td>graph</td><td>thumb</td><td>civil</td><td>rage</td></tr>
+            <tr><td>wreck</td><td>orphan</td><td>lamb</td><td>civic</td><td>stage</td></tr>
+          </tbody>
+        </table>
+
+        <div class="vowel-label" style="margin-top:16px">Compound Words Practice</div>
+        <div class="sight-word-grid">
+          <div class="sight-word">snowman</div><div class="sight-word">uphill</div><div class="sight-word">birdcage</div>
+          <div class="sight-word">haircut</div><div class="sight-word">blueberry</div><div class="sight-word">doorbell</div>
+          <div class="sight-word">toothbrush</div><div class="sight-word">firewood</div><div class="sight-word">rainbow</div>
+          <div class="sight-word">football</div><div class="sight-word">blackbird</div><div class="sight-word">sandbox</div>
+          <div class="sight-word">overcoat</div><div class="sight-word">handstand</div><div class="sight-word">downstairs</div>
+        </div>
+      </div>
+
+      <!-- VOWELS TAB -->
+      <div id="sounds-vowels" class="sounds-tab" style="display:none">
+        <div class="section-header" style="margin-top:0">
+          <div><h2>Vowel Pattern Quick Reference</h2><p>A guide to all the ways vowels can sound</p></div>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card tip-accent-blue">
+            <div class="tip-title">Short Vowels</div>
+            <div class="tip-body"><strong>a</strong> – bat &nbsp; <strong>e</strong> – bed &nbsp; <strong>i</strong> – sit &nbsp; <strong>o</strong> – dog &nbsp; <strong>u</strong> – bug<br><br>Short vowels appear in simple 3-letter CVC words (consonant-vowel-consonant).</div>
+          </div>
+          <div class="tip-card tip-accent-green">
+            <div class="tip-title">Long Vowels (Silent E)</div>
+            <div class="tip-body"><strong>a_e</strong> – cake &nbsp; <strong>i_e</strong> – bike &nbsp; <strong>o_e</strong> – note &nbsp; <strong>u_e</strong> – cube<br><br>The silent E at the end makes the vowel "say its name."</div>
+          </div>
+          <div class="tip-card tip-accent-amber">
+            <div class="tip-title">Vowel Teams</div>
+            <div class="tip-body"><strong>ee</strong> – see &nbsp; <strong>ai</strong> – rain &nbsp; <strong>oa</strong> – boat &nbsp; <strong>ea</strong> – eat<br><strong>oo</strong> – moon/book &nbsp; <strong>ou</strong> – out &nbsp; <strong>oi</strong> – coin</div>
+          </div>
+          <div class="tip-card tip-accent-teal">
+            <div class="tip-title">R-Controlled Vowels</div>
+            <div class="tip-body"><strong>ar</strong> – car &nbsp; <strong>or</strong> – fort &nbsp; <strong>er/ir/ur</strong> – her/bird/fur<br><br>When vowels are followed by R, the R changes how the vowel sounds.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGHT WORDS PAGE -->
+    <div id="page-sightwords" class="page-section">
+      <div class="section-header">
+        <div class="section-icon green">📚</div>
+        <div><h2>100 Important Words to Know</h2><p>High-frequency words your child should recognize instantly</p></div>
+      </div>
+
+      <div class="tip-card tip-accent-green" style="margin-bottom:20px">
+        <div class="tip-title">💡 How to practice</div>
+        <div class="tip-body">Point to each word and have your child say it instantly — without sounding it out. Tap any word to hear it and highlight it. Tap again to un-highlight. Aim for 5–10 words per day.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:24px" id="sightWordGrid">
+      </div>
+    </div>
+
+    <!-- RESOURCES PAGE -->
+    <div id="page-resources" class="page-section">
+      <div class="section-header">
+        <div class="section-icon amber">📥</div>
+        <div><h2>Downloadable Resources</h2><p>Charts, guides, and instruction videos — click to open</p></div>
+      </div>
+
+      <!-- ░░ READING ZONE ░░ -->
+      <div class="resource-zone resource-zone-reading">
+        <div class="resource-zone-label">
+          <span style="font-size:22px">📖</span>
+          <h2>Reading Resources</h2>
+          <span onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2])" class="sounds-inline-link">🔤 Interactive Sounds Reference →</span>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📕 7A &amp; 6A Reading — Alphabet Foundation</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1PVsfxeMRG6yv_zoGmVg1OShUmK0_X20z/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🔤</div>
+                <div><div class="resource-link-title">Alphabet Chart</div><div class="resource-link-sub">All 26 letters with sounds</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1xxn4MwTzS3d1_OzcQreIOmARMu5GqBIu/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">7A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1dLAfpBCRunXwI9p91_2D-n9wilH3IVx8/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">6A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📘 5A Reading — Letter Sounds</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div style="margin-bottom:10px;font-size:13px;color:#854f0b">
+              💡 Also see the <span onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2]);showSoundsTab('5a',document.querySelector('#page-sounds .tab'))" class="sounds-inline-link" style="cursor:pointer">Level 5A interactive sounds chart →</span>
+            </div>
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1PVsfxeMRG6yv_zoGmVg1OShUmK0_X20z/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🔤</div>
+                <div><div class="resource-link-title">Alphabet Chart</div><div class="resource-link-sub">Letter sounds reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1MkraKhQprx7oQT4XnVqNMI9lQCi0h7wQ/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📋</div>
+                <div><div class="resource-link-title">5A Alphabet Sounds Chart</div><div class="resource-link-sub">Audio sounds reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1dclmWRNXqfjH7NXF70AEju0uDbdN21lr/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📚</div>
+                <div><div class="resource-link-title">100 Important Words Chart</div><div class="resource-link-sub">Printable sight word list</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1doIfRjmE_v0TZt7H4Fw0ly04cXjiM796/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">5A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📙 4A Reading — Blends &amp; Vowels</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div style="margin-bottom:10px;font-size:13px;color:#854f0b">
+              💡 Also see the <span onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2]);showSoundsTab('4a',document.querySelectorAll('#page-sounds .tab')[1])" class="sounds-inline-link" style="cursor:pointer">Level 4A interactive blends chart →</span>
+            </div>
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1xeKu5qaiGCRGOovFOBfMgVz48W_C6drE/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🗣️</div>
+                <div><div class="resource-link-title">Vowel Sounds Chart</div><div class="resource-link-sub">All vowel patterns</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1m8q96PDjdl14Q8jA_Nt8GUfwdavSE5bu/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🔗</div>
+                <div><div class="resource-link-title">Consonant Combinations Chart</div><div class="resource-link-sub">All blends reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1HZ3I0mTT6dAxg5KmJ7ATgEiVVVjZYxa_/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📋</div>
+                <div><div class="resource-link-title">4A Consonant Combinations</div><div class="resource-link-sub">Audio sounds reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1RolcXTxT0rfLmFfWy4Zo3ruN9oflMwK1/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📋</div>
+                <div><div class="resource-link-title">4A/3A Vowel Sounds</div><div class="resource-link-sub">Audio sounds reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1caf1nmpgde3NGF-mztXCGkhbTVqSxM0K/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📚</div>
+                <div><div class="resource-link-title">4A/3A 100 Important Words</div><div class="resource-link-sub">Level-specific sight words</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1dclmWRNXqfjH7NXF70AEju0uDbdN21lr/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📚</div>
+                <div><div class="resource-link-title">100 Important Words Chart</div><div class="resource-link-sub">Printable sight word list</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/16X1hHlY4gbidLTJ2xSeULf4CaRjkgfBi/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">4A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📓 3A Reading — Advanced Sounds</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div style="margin-bottom:10px;font-size:13px;color:#854f0b">
+              💡 Also see the <span onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2]);showSoundsTab('3a',document.querySelectorAll('#page-sounds .tab')[2])" class="sounds-inline-link" style="cursor:pointer">Level 3A interactive sounds chart →</span>
+            </div>
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1g0_Rxg8-p06F-ICXDWFZn2JA_IvamHB6/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">⚡</div>
+                <div><div class="resource-link-title">Challenging Sounds Chart</div><div class="resource-link-sub">Complex patterns reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1m8q96PDjdl14Q8jA_Nt8GUfwdavSE5bu/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🔗</div>
+                <div><div class="resource-link-title">Consonant Combinations Chart</div><div class="resource-link-sub">All blends reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1RolcXTxT0rfLmFfWy4Zo3ruN9oflMwK1/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📋</div>
+                <div><div class="resource-link-title">4A/3A Vowel Sounds</div><div class="resource-link-sub">Audio sounds reference</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1caf1nmpgde3NGF-mztXCGkhbTVqSxM0K/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📚</div>
+                <div><div class="resource-link-title">4A/3A 100 Important Words</div><div class="resource-link-sub">Level-specific sight words</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1dclmWRNXqfjH7NXF70AEju0uDbdN21lr/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">📚</div>
+                <div><div class="resource-link-title">100 Important Words Chart</div><div class="resource-link-sub">Printable sight word list</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+              <a href="https://drive.google.com/file/d/1p9ceK8yoB7YccKhELhDTJbCbo5SUDnrW/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">3A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div><!-- end reading zone -->
+
+      <!-- ░░ MATH ZONE ░░ -->
+      <div class="resource-zone resource-zone-math">
+        <div class="resource-zone-label">
+          <span style="font-size:22px">🔢</span>
+          <h2>Math Resources</h2>
+          <span onclick="showPage('sounds',document.querySelectorAll('.nav-btn')[2]);showSoundsTab('vowels',document.querySelectorAll('#page-sounds .tab')[3])" class="sounds-inline-link sounds-inline-link-math">🔤 Vowel Patterns Reference →</span>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🔢 6A Math — Numbers 1–10</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1gjHikSW-4QNQVtIvTy1CXfFCop6ecaTa/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">6A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🔢 5A Math — Numbers to 50</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/1p8AjxAP_SVLVFTtuKj1KUIOmp2_VTzAk/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">5A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🔢 4A Math — Numbers to 100</span>
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <div class="resource-grid">
+              <a href="https://drive.google.com/file/d/164H512YZ4RzCLybmjSyaU9nWDXIEmn2E/view?usp=drivesdk" target="_blank" class="resource-link">
+                <div class="resource-link-icon">🎥</div>
+                <div><div class="resource-link-title">4A Instruction Video</div><div class="resource-link-sub">How to practice at home</div></div>
+                <div class="resource-link-arrow">↗</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div><!-- end math zone -->
+    </div>
+
+    <!-- TIPS PAGE -->
+    <div id="page-tips" class="page-section">
+      <div class="section-header">
+        <div class="section-icon teal">💡</div>
+        <div><h2>At-Home Practice Tips</h2><p>How to support your child between Kumon sessions</p></div>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card tip-accent-blue">
+          <div class="tip-icon">⏰</div>
+          <div class="tip-title">Same time, every day</div>
+          <div class="tip-body">Pick a consistent 15–20 minute window (after school or before bed works well). Routine removes resistance — your child knows what to expect.</div>
+        </div>
+        <div class="tip-card tip-accent-green">
+          <div class="tip-icon">🌟</div>
+          <div class="tip-title">Praise effort, not results</div>
+          <div class="tip-body">Say "I love how hard you tried" instead of "You're so smart." Effort-based praise builds resilience and keeps kids from avoiding hard things.</div>
+        </div>
+        <div class="tip-card tip-accent-amber">
+          <div class="tip-icon">🃏</div>
+          <div class="tip-title">Sight words as flashcards</div>
+          <div class="tip-body">Write the 100 words on index cards. Go through 10 per day. Move mastered words to a "done" pile — kids love seeing the stack grow.</div>
+        </div>
+        <div class="tip-card tip-accent-teal">
+          <div class="tip-icon">🗣️</div>
+          <div class="tip-title">Say sounds out loud</div>
+          <div class="tip-body">When practicing blends, always say them aloud — not just read them silently. "bl says buh-luh" said clearly, then in a word: "blast." Repetition builds automaticity.</div>
+        </div>
+        <div class="tip-card tip-accent-purple">
+          <div class="tip-icon">📖</div>
+          <div class="tip-title">Read together daily</div>
+          <div class="tip-body">Even 10 minutes of reading aloud (you read, or they read to you) builds vocabulary, fluency, and love of reading. Let them choose the book whenever possible.</div>
+        </div>
+        <div class="tip-card tip-accent-blue">
+          <div class="tip-icon">❌</div>
+          <div class="tip-title">Don't correct mid-sentence</div>
+          <div class="tip-body">If your child makes a mistake while reading, wait until they finish the sentence before gently correcting. Mid-sentence correction can break confidence and flow.</div>
+        </div>
+        <div class="tip-card tip-accent-green">
+          <div class="tip-icon">🔁</div>
+          <div class="tip-title">Review before you advance</div>
+          <div class="tip-body">If your child struggles with a sound or blend, slow down and repeat it multiple days before moving to the next one. Mastery beats speed every time in Kumon.</div>
+        </div>
+        <div class="tip-card tip-accent-amber">
+          <div class="tip-icon">🎯</div>
+          <div class="tip-title">Aim for 80–90% accuracy</div>
+          <div class="tip-body">Perfect scores aren't the goal. If your child gets 80–90% right, they're in the ideal learning zone — challenged but not overwhelmed.</div>
+        </div>
+        <div class="tip-card tip-accent-teal">
+          <div class="tip-icon">🏆</div>
+          <div class="tip-title">Celebrate small wins</div>
+          <div class="tip-body">Finishing worksheets, learning 5 new sight words, or reading a whole page without help — all worth celebrating. Small wins compound into big progress.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-header">
+        <div><h2>How to read the blends charts with your child</h2></div>
+      </div>
+      <div class="tip-card" style="margin-bottom:16px">
+        <div class="tip-body" style="font-size:14px;line-height:1.8">
+          <strong>Step 1</strong> — Point to the header (e.g., <strong>bl_</strong>). Say "This is the bl blend. It makes the sound buh-luh."<br>
+          <strong>Step 2</strong> — Point to the first word (blast). Ask your child to blend the sounds: "b-l-a-s-t… blast!"<br>
+          <strong>Step 3</strong> — Go through 3–5 words per blend, then pause and ask: "Can you think of another bl word?"<br>
+          <strong>Step 4</strong> — Come back to tricky blends on future days. Repetition is the point — not speed.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    Kumon of Sylvania · Private Parent Resource Hub · For family use only · Not for distribution
+  </footer>
+</div>
+
+<script>
+  // ——— ACCESS CODES ———
+  // Add/remove codes here. Codes are NOT case-sensitive.
+  const VALID_CODES = ['KS25','READ','MATH','EL25','KUMI','SYLL'];
+  // ————————————————————
+
+  const SESSION_KEY = 'ks_parent_access';
+
+  function advance(el, nextId) {
+    if(el.value.length===1){ const n=document.getElementById(nextId); if(n)n.focus(); }
+    document.getElementById('lockError').classList.remove('show');
+  }
+
+  function back(e, prevId, selfId) {
+    if(e.key==='Backspace'){
+      const self=document.getElementById(selfId);
+      if(self&&self.value===''){
+        const prev=document.getElementById(prevId);
+        if(prev){prev.focus();prev.value='';}
+      }
+    }
+    if(e.key==='Enter') tryUnlock();
+  }
+
+  function tryUnlock() {
+    const code = ['c1','c2','c3','c4'].map(id=>document.getElementById(id).value).join('').toUpperCase();
+    if(VALID_CODES.includes(code)){
+      sessionStorage.setItem(SESSION_KEY,'1');
+      document.getElementById('lockScreen').style.display='none';
+      document.getElementById('mainSite').style.display='block';
+    } else {
+      const err=document.getElementById('lockError');
+      err.classList.add('show');
+      ['c1','c2','c3','c4'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.value='';
+        el.style.borderColor='#a32d2d';
+        setTimeout(()=>el.style.borderColor='',1500);
+      });
+      document.getElementById('c1').focus();
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById('mainSite').style.display='none';
+    document.getElementById('lockScreen').style.display='flex';
+    ['c1','c2','c3','c4'].forEach(id=>document.getElementById(id).value='');
+  }
+
+  function showPage(page, btn) {
+    document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+  }
+
+  function showSoundsTab(tab, btn) {
+    document.querySelectorAll('.sounds-tab').forEach(t=>t.style.display='none');
+    document.getElementById('sounds-'+tab).style.display='block';
+    document.querySelectorAll('#page-sounds .tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    setTimeout(wireSkillCards, 50);
+  }
+
+  function toggleAccordion(btn) {
+    const accordion = btn.parentElement;
+    accordion.classList.toggle('open');
+  }
+
+  // ═══════════════════════════════════════════════
+  //  PHONICS AUDIO ENGINE
+  //  Uses Web Speech API with phonetic overrides so
+  //  the browser says the SOUND, not the letter name
+  // ═══════════════════════════════════════════════
+
+  // Map display text → what to actually speak for phonics accuracy
+  const PHONICS_MAP = {
+    // Single consonants — append a soft schwa to produce the sound
+    'b':'buh','c':'kuh','d':'duh','f':'fuh','g':'guh','h':'huh',
+    'j':'juh','k':'kuh','l':'luh','m':'muh','n':'nuh','p':'puh',
+    'q':'kwuh','r':'ruh','s':'sss','t':'tuh','v':'vuh','w':'wuh',
+    'x':'ks','y':'yuh','z':'zzz',
+    // Short vowels — spelled so TTS produces the correct short sound
+    'a':'aaa... apple','e':'ehh... egg','i':'ihh... itch',
+    'o':'aww... octopus','u':'uhh... umbrella',
+    // L-blends
+    'bl_':'bl','cl_':'cl','fl_':'fl','gl_':'gl','pl_':'pl','sl_':'sl',
+    // R-blends
+    'br_':'br','dr_':'dr','fr_':'fr','gr_':'gr','pr_':'pr','tr_':'tr',
+    // S-blends
+    'sm_':'sm','sp_':'sp','sk_':'sk','sn_':'sn','st_':'st','sw_':'sw',
+    // Digraphs
+    'ch_':'ch','sh_':'sh','wh_':'wh','th_':'th','_ng':'ng',
+    'str_':'str',
+    // Endings
+    '_ck':'k','_nk':'nk','_nt':'nt','_nd':'nd','_mp':'mp','_st':'st',
+    '_ch':'ch','_sh':'sh','_th':'th',
+    // Silent-E long vowels
+    'a_e':'ayy... cake','i_e':'eye... bike',
+    'o_e':'ohh... nose','u_e':'yoo... cube',
+    // R-controlled
+    'ar':'aar','or':'orr',
+    'ir':'err','ur':'err','er':'err',
+    // Vowel combos
+    '_ay':'ayy','_ew':'yoo','_ow':'ohh','_oy':'oy','_aw':'aww',
+    '_old':'ohld','_own':'ow','_alk':'awk','_ight':'ite','_all':'awl',
+    'ee':'eee... tree',
+    'oo':'ooo... moon',
+    'ai':'ay... rain','ea':'eee... eat','oa':'ohh... boat',
+    'ou':'ow... out','oi':'oy... coin','ui':'ooo... fruit',
+    'air':'air... pair',
+    // Double consonants — just say the word
+    'nn':'nn','tt':'tt','ll':'ll','bb':'bb','mm':'mm','cc':'cc',
+    'ss':'ss','dd':'dd','pp':'pp','gg':'gg','rr':'rr','ff':'ff',
+    // 3A special combos
+    'wr_':'rrr, the w is silent','ph_/_ph':'fff, like phone',
+    'sch_':'skuh','scr_':'skruh','thr_':'thruh',
+    '_mb':'mmm, the b is silent','_ue':'ooo',
+    '_y (e)':'eee','_ly':'lee',
+    '_y (i)':'eye','_er':'err','_le':'ul',
+    '_ing':'ing','_tch':'ch','_ge':'juh','_ce':'sss','ci_':'sih',
+    'ph_':'fff'
+  };
+
+  // Sight words — just read the word naturally, no phonics overrides
+  function speakSightWord(word) {
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(word.trim());
+    utt.rate = 0.82;
+    utt.pitch = 1.05;
+    utt.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v=>
+      v.lang.startsWith('en') && (v.name.includes('Samantha')||v.name.includes('Google US')||v.name.includes('Karen')||v.name.includes('Moira'))
+    ) || voices.find(v=>v.lang.startsWith('en'));
+    if(preferred) utt.voice = preferred;
+    window.speechSynthesis.speak(utt);
+  }
+
+  function speakPhonics(raw) {
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    // Look up phonetic override, fall back to raw text
+    const key = raw.toLowerCase().trim();
+    const speak = PHONICS_MAP[key] || raw;
+
+    const utt = new SpeechSynthesisUtterance(speak);
+    utt.rate = 0.82;
+    utt.pitch = 1.05;
+    utt.volume = 1;
+    // Prefer a natural English voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v=>
+      v.lang.startsWith('en') && (v.name.includes('Samantha')||v.name.includes('Google US')||v.name.includes('Karen')||v.name.includes('Moira'))
+    ) || voices.find(v=>v.lang.startsWith('en'));
+    if(preferred) utt.voice = preferred;
+
+    window.speechSynthesis.speak(utt);
+  }
+
+  // Flash animation for tapped tiles
+  function flashTile(el) {
+    el.style.transition='background .1s';
+    el.style.background='#b5d4f4';
+    setTimeout(()=>{ el.style.background=''; },300);
+  }
+
+  // All 100 sight words in order
+  const SIGHT_WORDS = [
+    'the','is','a','on','I','to','it','says','for','and',
+    'have','in','am','like','so','does','we','with','his','time',
+    'where','who','off','he','up','my','please','friend','has','see',
+    'her','do','not','at','an','put','by','can','you','get',
+    'want','one','of','will','she','pretty','are','him','live','me',
+    'from','what','your',"can't",'but','push','help','when','three','its',
+    'went','that','they','away','must','jump','these','this','our','old',
+    'saw','eat','too','those',"it's",'if','here','then',"don't",'or',
+    'out','was','go','two','now','there','be','more','each','own',
+    'were','very','ready','some','than','use','wear','house','after','ate'
+  ];
+
+  function buildSightWordGrid() {
+    const grid = document.getElementById('sightWordGrid');
+    if(!grid) return;
+    grid.innerHTML = '';
+    SIGHT_WORDS.forEach((word, i) => {
+      const cell = document.createElement('div');
+      cell.className = `sw-cell sw-c${i % 10}`;
+      cell.dataset.word = word;
+      cell.innerHTML = `<div style="font-size:11px;color:inherit;opacity:.6;margin-bottom:2px">${i+1}</div>${word}`;
+      cell.addEventListener('click', function() {
+        speakSightWord(this.dataset.word);
+        this.classList.toggle('done');
+        this.classList.remove('playing');
+        void this.offsetWidth;
+        this.classList.add('playing');
+      });
+      grid.appendChild(cell);
+    });
+  }
+
+  // Wire up audio — words only, no letter/pattern sounds
+  function wireSkillCards() {
+
+    // Colorful letter cards — speak the example word
+    document.querySelectorAll('.lcard').forEach(card => {
+      card.addEventListener('click', function() {
+        const word = this.dataset.word;
+        if(word){ speakSightWord(word); }
+        this.classList.remove('playing');
+        void this.offsetWidth;
+        this.classList.add('playing');
+      });
+    });
+
+    // 3-letter word practice — say the word
+    document.querySelectorAll('.vowel-word').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        speakSightWord(this.textContent.trim());
+        flashTile(this);
+      });
+    });
+
+    // Blend table words (td cells only, not th headers)
+    document.querySelectorAll('.blend-table td').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        speakSightWord(this.textContent.trim());
+        flashTile(this);
+      });
+    });
+
+    // Sight words
+    document.querySelectorAll('.sight-word').forEach(el => {
+      el.removeAttribute('onclick');
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        speakSightWord(this.textContent.trim());
+        this.style.background = this.style.background ? '' : 'var(--green-light)';
+      });
+    });
+  }
+
+  // Run after DOM ready; also re-run after tab switches
+  document.addEventListener('DOMContentLoaded', () => { wireSkillCards(); buildSightWordGrid(); });
+  setTimeout(() => { wireSkillCards(); buildSightWordGrid(); }, 400);
+
+  // Auto-login if session active
+  if(sessionStorage.getItem(SESSION_KEY)){
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('mainSite').style.display='block';
+  }
+
+  // Auto-advance on paste
+  document.getElementById('c1').addEventListener('paste', function(e) {
+    e.preventDefault();
+    const text = (e.clipboardData||window.clipboardData).getData('text').replace(/\s/g,'').toUpperCase();
+    ['c1','c2','c3','c4'].forEach((id,i)=>{
+      if(text[i]) document.getElementById(id).value=text[i];
+    });
+    setTimeout(tryUnlock, 100);
+  });
+</script>
+</body>
+</html>
