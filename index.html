@@ -311,27 +311,16 @@
 <!-- LOCK SCREEN -->
 <div id="lockScreen">
   <div class="lock-card">
-    <div class="lock-logo">🔐</div>
-    <div class="lock-title">Parent Resource Hub</div>
-    <div class="lock-sub">Kumon of Sylvania — Private resources to help your child practice at home. Enter your access code to continue.</div>
-    <div class="code-inputs">
-      <input class="code-input" id="c1" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="advance(this,'c2')" onkeydown="back(event,'','c1')">
-      <input class="code-input" id="c2" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="advance(this,'c3')" onkeydown="back(event,'c1','c3')">
-      <input class="code-input" id="c3" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="advance(this,'c4')" onkeydown="back(event,'c2','c4')">
-      <input class="code-input" id="c4" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="advance(this,null)" onkeydown="back(event,'c3','c4')">
-    </div>
-    <button class="lock-btn" onclick="tryUnlock()">🔓 Enter</button>
-    <div class="lock-hint">Ask your instructor for your 4-character access code.</div>
-    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">— or type it all at once —</p>
-    <div style="display:flex;gap:8px;max-width:260px;margin:0 auto 16px">
-      <input id="codeAll" type="text" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-        placeholder="e.g. KS25"
-        style="flex:1;padding:12px;font-size:20px;font-weight:700;text-align:center;border:2px solid var(--gray-border);border-radius:10px;letter-spacing:6px;color:var(--blue);outline:none"
-        oninput="syncFromSingle(this)"
-        onkeydown="if(event.key==='Enter') tryUnlock()">
-    </div>
-    <div class="lock-error" id="lockError">❌ Incorrect code. Please check with your instructor.</div>
-    <div class="code-hint-box">💡 <strong>Tip:</strong> Codes are not case-sensitive. </div>
+    <div class="lock-logo">📚</div>
+    <div class="lock-title">Kumon of Sylvania</div>
+    <div class="lock-sub">Parent Resource Hub — enter your access code to continue.</div>
+    <input id="codeAll" type="password" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      placeholder="Enter code"
+      style="width:100%;padding:14px;font-size:20px;font-weight:700;text-align:center;border:2px solid var(--gray-border);border-radius:10px;letter-spacing:6px;color:var(--blue);outline:none;margin-bottom:16px;background:#f8f9fa"
+      oninput="document.getElementById('lockError').classList.remove('show')"
+      onkeydown="if(event.key==='Enter') tryUnlock()">
+    <button class="lock-btn" onclick="tryUnlock()">Enter →</button>
+    <div class="lock-error" id="lockError">Incorrect code — please check with your instructor.</div>
   </div>
 </div>
 
@@ -982,42 +971,8 @@
 
   const SESSION_KEY = 'ks_parent_access';
 
-  function advance(el, nextId) {
-    // Strip anything non-alphanumeric (catches autocorrect apostrophes etc.)
-    el.value = el.value.replace(/[^a-zA-Z0-9]/g,'');
-    if(el.value.length === 1 && nextId) {
-      document.getElementById(nextId).focus();
-    }
-    document.getElementById('lockError').classList.remove('show');
-    // Sync to single field
-    const combined = ['c1','c2','c3','c4'].map(id=>document.getElementById(id).value).join('');
-    const sf = document.getElementById('codeAll');
-    if(sf) sf.value = combined.toUpperCase();
-  }
-
-  function syncFromSingle(el) {
-    const val = el.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
-    el.value = val;
-    ['c1','c2','c3','c4'].forEach((id,i) => {
-      document.getElementById(id).value = val[i] || '';
-    });
-    document.getElementById('lockError').classList.remove('show');
-    if(val.length === 4) tryUnlock();
-  }
-
-  function back(e, prevId, selfId) {
-    if(e.key==='Backspace'){
-      const self=document.getElementById(selfId);
-      if(self&&self.value===''){
-        const prev=document.getElementById(prevId);
-        if(prev){prev.focus();prev.value='';}
-      }
-    }
-    if(e.key==='Enter') tryUnlock();
-  }
-
   function tryUnlock() {
-    const code = ['c1','c2','c3','c4'].map(id=>document.getElementById(id).value).join('').toUpperCase();
+    const code = (document.getElementById('codeAll').value || '').toUpperCase().trim();
     if(VALID_CODES.includes(code)){
       sessionStorage.setItem(SESSION_KEY,'1');
       document.getElementById('lockScreen').style.display='none';
@@ -1025,13 +980,11 @@
     } else {
       const err=document.getElementById('lockError');
       err.classList.add('show');
-      ['c1','c2','c3','c4'].forEach(id=>{
-        const el=document.getElementById(id);
-        el.value='';
-        el.style.borderColor='#a32d2d';
-        setTimeout(()=>el.style.borderColor='',1500);
-      });
-      document.getElementById('c1').focus();
+      const el=document.getElementById('codeAll');
+      el.value='';
+      el.style.borderColor='#a32d2d';
+      setTimeout(()=>el.style.borderColor='',1500);
+      el.focus();
     }
   }
 
@@ -1039,7 +992,7 @@
     sessionStorage.removeItem(SESSION_KEY);
     document.getElementById('mainSite').style.display='none';
     document.getElementById('lockScreen').style.display='flex';
-    ['c1','c2','c3','c4'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('codeAll').value='';
   }
 
   function showPage(page, btn) {
@@ -1248,16 +1201,6 @@
     document.getElementById('lockScreen').style.display='none';
     document.getElementById('mainSite').style.display='block';
   }
-
-  // Auto-advance on paste
-  document.getElementById('c1').addEventListener('paste', function(e) {
-    e.preventDefault();
-    const text = (e.clipboardData||window.clipboardData).getData('text').replace(/\s/g,'').toUpperCase();
-    ['c1','c2','c3','c4'].forEach((id,i)=>{
-      if(text[i]) document.getElementById(id).value=text[i];
-    });
-    setTimeout(tryUnlock, 100);
-  });
 </script>
 </body>
 </html>
